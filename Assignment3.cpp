@@ -4,7 +4,9 @@ using namespace std;
 //not given in assignment
 class Team {};
 
-class Player {
+class People {};
+
+class Player : public People{
 public:
 	Player(int nplayers) :num_players(nplayers), team(nullptr) {
 		points = new int[num_players];
@@ -14,12 +16,15 @@ public:
 	}
 
 	//COPY CONSTRUCTOR
-	Player(const Player& original) {
-		num_players = original.num_players;	//copy num_players
-		team = original.team;					//shallow copy of team because no new operator
+	Player(const Player& original)
+		:Player(original.num_players) {	//delegating constructor------------------------------STUDY
+		num_players = original.num_players;	//#1 shallow copy
+		team = original.team;
 
-		points = new int[num_players];
-		for (int i = 0; i < num_players; i++) {
+		//#1.5 Edge cases
+
+		points = new int[num_players];	//#2 Allocate
+		for (int i = 0; i < num_players; i++) {//#3 deep copy
 			points[i] = original.points[i];	//copies the points into original.points instead of hardcoded int
 		}
 	}
@@ -34,12 +39,16 @@ public:
 			points = nullptr;
 		}
 
+		//copy semantics , assignment overload------------------------------STUDY
+		People::operator=(original);
+
 		//clean up
 		delete[] points;
 
 		//repeat copy constructor
 		num_players = original.num_players;	
-		team = original.team;					
+		team = original.team;			
+
 		points = new int[num_players];
 		for (int i = 0; i < num_players; i++) {
 			points[i] = original.points[i];	
