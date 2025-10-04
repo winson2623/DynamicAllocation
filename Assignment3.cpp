@@ -1,6 +1,54 @@
 #include <iostream>
 using namespace std;
 
+struct Book {
+	std::string title;
+	std::string author;
+};
+
+//Copy Constructor video
+class Person {
+public:
+	Person() {
+		myBook = new Book;
+		myBook->title = "The Long Walk";
+		(*myBook).author = "Stephen King";
+	}
+	
+	Person(const Person& original) {
+		if (original.myBook == nullptr) {
+			myBook == nullptr;
+		}
+
+		myBook = new Book;
+		myBook->title = original.myBook->title;
+		myBook->author = original.myBook->author;
+
+		//*myBook = *original.myBook (shallow copy used when doesn't have dynamic)
+
+	}
+
+	Person& operator=(const Person& original){
+		if (this == &original) { return *this; }
+
+		if (original.myBook == nullptr) {
+			myBook == nullptr;
+		}
+
+		delete myBook;
+
+		myBook = new Book;
+		myBook->title = original.myBook->title;
+		myBook->author = original.myBook->author;
+
+		return *this;
+	}
+	//destructor
+	~Person() { delete myBook; }
+private: 
+	Book * myBook;
+};
+
 //not given in assignment
 class Team {};
 
@@ -106,4 +154,12 @@ int main() {
 		cout << endl;
 	}
 	return 0;
+
+	//Person, Book, Author example
+	Person p1;
+	Person p2(p1); // Person p2 = p1
+	
+	Person p2;
+	p2 = p1;
+
 }
